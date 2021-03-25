@@ -4,7 +4,7 @@
 
 ### balance tranfser
 data:
-```
+```json
 {
   "amount": 1,
   "username": "A49",
@@ -15,7 +15,7 @@ data:
 
 ### item purchase
 data:
-```
+```json
 {
   "amount": 0.9,
   "username": "A49",
@@ -34,7 +34,7 @@ id should be unique.
 URL: `/api/market/give-for-free`
 
 data:
-```
+```json
 {
   "username" : "darth", 
   "user_id": 1, 
@@ -49,7 +49,7 @@ CURL example:
 ### balance transfer
 URL: `/api/market/transfer-money`
 data:
-```
+```json
 {
   "amount" : 2, 
   "username" : "a49", 
