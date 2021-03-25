@@ -66,7 +66,7 @@ CURL example:
 
 # signature validation / generation
 
-
+using python:
 
 ```python
 #!/usr/bin/python3
@@ -104,6 +104,7 @@ sign_valid = market_api_validate_signature(data, "secret")
 print(sign_valid)
 ```
 
+Using javascript:
 
 ```javascript
 "use strict";
