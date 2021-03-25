@@ -68,7 +68,7 @@ CURL example:
 
 
 
-~~~
+```python
 #!/usr/bin/python3
 from hashlib import sha256
 
@@ -102,13 +102,70 @@ data = {
 }
 sign_valid = market_api_validate_signature(data, "secret")
 print(sign_valid)
-~~~
+```
+
+
+```javascript
+"use strict";
+let crypto = require("crypto");
+
+const sort_obj = function(obj) {
+  return Object.keys(obj).sort().reduce(function (result, key) {
+    result[key] = obj[key];
+    return result;
+  }, {});
+}
+
+const obj_to_string = function (obj) {
+ obj = sort_obj(obj);
+    let str = '';
+    for (let p in obj) {
+        if (obj.hasOwnProperty(p)) {
+            str += p + obj[p];
+        }
+    }
+    return str;
+}
+
+const market_api_generate_signature = function(j, secret){
+    const str_to_hash = obj_to_string(j) + secret
+    //console.log(str_to_hash)
+    const hashed = crypto.createHash('sha256').update(str_to_hash).digest('hex');
+    //console.log(hashed)
+    return hashed
+}
+const market_api_validate_signature = function(j, secret){
+  const nl_sig = j["signature"]
+  delete j["signature"]
+  const our_sig = market_api_generate_signature(j, secret)
+  return nl_sig === our_sig
+}
+
+let data = {
+  "amount": 0.9,
+  "username": "A49",
+  "unique_id": 89968,
+  "item_id": "E3yugw",
+  "signature": "dc20a4d73447ac51689d6e03115aa135a8d734e610352dda818e830e70a60560"
+}
+let sign_valid = market_api_validate_signature(data, "key")
+console.log(sign_valid)
+
+data = {
+  "amount": 1,
+  "username": "A49",
+  "unique_id": 21,
+  "signature": "baf17e67c9b0389433c8c55283935b5fa27f73e86d33b7123027797d6927f51b"
+}
+sign_valid = market_api_validate_signature(data, "secret")
+console.log(sign_valid)
+```
 
 
 # Example callback handler
 using python + bottle
 
-~~~
+```python
 #!/usr/bin/python3
 
 from bottle import run, request, post
@@ -139,4 +196,4 @@ def on_purchase():
 
 app = application = bottle.Bottle()
 run(host='0.0.0.0', port=8080)
-~~~
+```
