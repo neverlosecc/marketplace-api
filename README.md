@@ -164,7 +164,7 @@ console.log(sign_valid)
 
 
 # Example callback handler
-using python + bottle
+Using python + bottle:
 
 ```python
 #!/usr/bin/python3
@@ -197,4 +197,56 @@ def on_purchase():
 
 app = application = bottle.Bottle()
 run(host='0.0.0.0', port=8080)
+```
+
+Using nodejs + express:
+
+```javascript
+const express = require('express')
+const app = express()
+const crypto = require("crypto")
+
+const secret_key = "key"
+
+const sort_obj = function(obj) {
+  return Object.keys(obj).sort().reduce(function (result, key) {
+    result[key] = obj[key]
+    return result
+  }, {})
+}
+
+const obj_to_string = function (obj) {
+ obj = sort_obj(obj)
+    let str = ''
+    for (let p in obj) {
+        if (obj.hasOwnProperty(p)) {
+            str += p + obj[p]
+        }
+    }
+    return str
+}
+
+const market_api_generate_signature = function(j, secret){
+    const str_to_hash = obj_to_string(j) + secret
+    const hashed = crypto.createHash('sha256').update(str_to_hash).digest('hex')
+    return hashed
+}
+
+const market_api_validate_signature = function(j, secret){
+  const nl_sig = j["signature"]
+  delete j["signature"]
+  const our_sig = market_api_generate_signature(j, secret)
+  return nl_sig === our_sig
+}
+
+app.post('/on_purchase', (req, res) => {
+  if (!market_api_validate_signature(req.body.data, secret_key))
+    res.send("invalid signature")
+
+  let response = req.body.data.username + " bought item https://neverlose.cc/market/item?id=" + req.body.data.item_id
+  console.log(response)
+  res.send(response)
+})
+
+app.listen(8080)
 ```
