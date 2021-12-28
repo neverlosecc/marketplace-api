@@ -46,7 +46,9 @@ data:
 CURL example:
 `curl "https://neverlose.cc/api/market/give-for-free" --data '{"username" : "darth", "user_id": 1, "id": 1338, "code": "E3yugw", "signature": "c0e8a7fa9c9fafe16d21ad0be087a6372bb7a9256fab212ff106666a152c6e0a"}' -X POST --header "Content-Type: application/json"`
 
-### balance transfer
+This code gives item `E3yugw` to user darth if your user id is 1
+
+### balance transfer - official resellers only
 URL: `/api/market/transfer-money`
 data:
 ```json
@@ -61,7 +63,32 @@ data:
 CURL example:
 `curl "https://neverlose.cc/api/market/transfer-money" --data '{"amount" : 2, "username" : "a49", "user_id": 1, "id": 1337, "signature": "32208d45c593478eceb0e15aa0f8013a1259c1ef32f755edf2c49b9df2072aa2"}' -X POST --header "Content-Type: application/json"`
 
+This code transfers 2 NLE to user a49 if your user id is 1
 
+### product gift - official resellers only
+URL: `/api/market/gift-product`
+data:
+```json
+{
+    "username": "darth",
+    "user_id": 1,
+    "id": 2,
+    "product": "csgo",
+    "cnt": 0,
+    "signature": "32208d45c593478eceb0e15aa0f8013a1259c1ef32f755edf2c49b9df2072aa2"
+}
+```
+cnt is an ID of account upgrade type, for CS:GO its: 
+```
+0 - 17.1 NLE for 30 days
+1 - 44.1 NLE for 90 days
+2 - 80.1 NLE for 180 days
+3 - 134.1 NLE for 365 days
+```
+CURL example:
+`curl "https://neverlose.cc/api/market/gift-product" --data '{"username" : "darth", "user_id": 1, "id": 2, "product": "csgo", "cnt": 0, "signature": "32208d45c593478eceb0e15aa0f8013a1259c1ef32f755edf2c49b9df2072aa2"}' -X POST --header "Content-Type: application/json"`
+
+This code gifts 30 days for CS:GO to user darth if your user id is 1
 
 
 # signature validation / generation
