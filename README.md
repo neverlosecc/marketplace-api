@@ -32,7 +32,7 @@ You can set webhook urls in market api settings
 For signature verification refer to [signatures section](#signature-creation-and-validation).
 You should always check signature validity and ignore any events with invalid signature
 
-You can also check example webhook callback handler [here](#webhook-callbacks)
+You can also check example webhook callback handler [here](#example-callback-handler-using-python--bottle)
 
 ### Balance transfer
 
