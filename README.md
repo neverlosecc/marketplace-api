@@ -225,6 +225,8 @@ URL: `/api/market/get-prices`
 |------------|-------------------------------------|
 | `product`  | Only `csgo` product is available    |
 
+*Read-only method, `id` parameter is not needed here*
+
 Response:
 ```json
 {
@@ -274,6 +276,8 @@ URL: `/api/market/is-user-exists`
 |------------|-------------------|
 | `username` | Username to check |
 
+*Read-only method, `id` parameter is not needed here*
+
 Response:
 ```json
 {
@@ -296,6 +300,8 @@ URL: `/api/market/get-balance`
   "signature": "..."
 }
 ```
+
+*Read-only method, `id` parameter is not needed here*
 
 Response:
 ```json
