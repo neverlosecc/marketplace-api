@@ -13,7 +13,7 @@
     * [Failure response](#failure-response)
 * [Api methods](#api-methods)
   * [Give item to user](#give-item-to-user)
-  * [Balance transfer](#balance-transfer-1)
+  * [Transfer balance](#transfer-balance)
   * [Gift product](#gift-product)
   * [Get product prices](#get-product-prices)
   * [Check if user exists](#check-if-user-exists)
@@ -31,6 +31,8 @@ You can set webhook urls in market api settings
 
 For signature verification refer to [signatures section](#signature-creation-and-validation).
 You should always check signature validity and ignore any events with invalid signature
+
+You can also check example webhook callback handler [here](#webhook-callbacks)
 
 ### Balance transfer
 
@@ -148,7 +150,7 @@ This request gives item `E3yugw` to user `darth`
 | `code`      | Market code of item you want to give |
 
 
-### Balance transfer
+### Transfer balance
 **This method is available for official resellers only**
 
 URL: `/api/market/transfer-money`
