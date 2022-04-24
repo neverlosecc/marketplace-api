@@ -286,6 +286,26 @@ Response:
 `user_exists` field will be `true` if user `darth` exists, `false` otherwise
 
 
+### Get NLE balance
+
+URL: `/api/market/get-balance`
+
+```json
+{
+  "user_id": 1,
+  "signature": "..."
+}
+```
+
+Response:
+```json
+{
+  "succ": true,
+  "success": true,
+  "balance": 62.6
+}
+```
+
 ## Signature creation and validation
 
 ### Python example
