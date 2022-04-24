@@ -2,15 +2,25 @@
 
 <!-- vim-markdown-toc GFM -->
 
-  * [Webhook callbacks](#webhook-callbacks)
-    * [Balance transfer](#balance-transfer)
-    * [Item purchase](#item-purchase)
-  * [Api requests](#api-requests)
-    * [give item to username](#give-item-to-username)
-    * [balance transfer - official resellers only](#balance-transfer---official-resellers-only)
-    * [product gift - official resellers only](#product-gift---official-resellers-only)
+* [Webhook callbacks](#webhook-callbacks)
+  * [Balance transfer](#balance-transfer)
+  * [Item purchase](#item-purchase)
+* [Api requests](#api-requests)
+  * [Common parameters](#common-parameters)
+  * [Curl example](#curl-example)
+  * [Responses](#responses)
+    * [Successful response](#successful-response)
+    * [Failure response](#failure-response)
+* [Api methods](#api-methods)
+  * [Give item to user](#give-item-to-user)
+  * [Balance transfer](#balance-transfer-1)
+  * [Gift product](#gift-product)
+  * [Get product prices](#get-product-prices)
+  * [Check if user exists](#check-if-user-exists)
 * [Signature creation and validation](#signature-creation-and-validation)
-* [Example callback handler](#example-callback-handler)
+  * [Python example](#python-example)
+  * [Javascript example](#javascript-example)
+* [Example callback handler using python + bottle](#example-callback-handler-using-python--bottle)
 
 <!-- vim-markdown-toc -->
 
@@ -274,9 +284,9 @@ Response:
 `user_exists` field will be `true` if user `darth` exists, `false` otherwise
 
 
-# Signature creation and validation
+## Signature creation and validation
 
-## Python example
+### Python example
 
 ```python
 #!/usr/bin/python3
@@ -316,7 +326,7 @@ request_data = {
 request_data.update(signature = market_api_generate_signature(request_data, "key"))
 ```
 
-## Javascript example
+### Javascript example
 
 ```javascript
 "use strict";
@@ -366,7 +376,7 @@ console.log(sign_valid)
 ```
 
 
-# Example callback handler using python + bottle
+## Example callback handler using python + bottle
 
 ```python
 #!/usr/bin/python3
