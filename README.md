@@ -17,6 +17,7 @@
   * [Gift product](#gift-product)
   * [Get product prices](#get-product-prices)
   * [Check if user exists](#check-if-user-exists)
+  * [Get NLE balance](#get-nle-balance)
 * [Signature creation and validation](#signature-creation-and-validation)
   * [Python example](#python-example)
   * [Javascript example](#javascript-example)
