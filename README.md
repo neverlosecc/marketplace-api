@@ -211,7 +211,7 @@ For converted RUB prices refer to `get-prices` method below
 ### Get product prices
 **This method is available for official resellers only**
 
-URL: `/api/market/gift-product`
+URL: `/api/market/get-prices`
 
 ```json
 {
