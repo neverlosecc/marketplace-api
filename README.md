@@ -116,7 +116,9 @@ Replace data and url in example above depending on action you need to do
 }
 ```
 
-Successful responses may contain additional fields, refer to methods documentation below
+Successful responses may contain additional fields, refer to methods documentation below.
+
+`succ` field is left for backwards compatibility with older api revisions and always have the same value as `success`.
 
 #### Failure response
 
