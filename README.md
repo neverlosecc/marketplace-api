@@ -2,6 +2,7 @@
 
 <!-- vim-markdown-toc GFM -->
 
+* [Recent changes](#recent-changes)
 * [Webhook callbacks](#webhook-callbacks)
   * [Balance transfer](#balance-transfer)
   * [Item purchase](#item-purchase)
@@ -24,6 +25,18 @@
 * [Example callback handler using python + bottle](#example-callback-handler-using-python--bottle)
 
 <!-- vim-markdown-toc -->
+
+## Recent changes
+
+- 25 Apr 2022
+  - Added `get-balance` method
+  - Webhooks are now have `kind` parameter,   
+    so they can be distinguished easily when sent to single endpoint
+  - Updated docs
+- 04 Feb 2022
+  - Added `is-user-exists` method
+  - Added `get-prices` method
+  - Success/failure responses are now consistent between methods (without breaking changes)
 
 ## Webhook callbacks
 
