@@ -22,7 +22,7 @@
 * [Signature creation and validation](#signature-creation-and-validation)
   * [Python example](#python-example)
   * [Javascript example](#javascript-example)
-  * [PHP example](#)
+  * [PHP example](#php-library)
 * [Example webhook callback handlers](#example-webhook-callback-handlers)
   * [python + bottle](#python--bottle)
   * [nodejs + express](#nodejs--express)
