@@ -22,6 +22,7 @@
 * [Signature creation and validation](#signature-creation-and-validation)
   * [Python example](#python-example)
   * [Javascript example](#javascript-example)
+  * [PHP example](#)
 * [Example webhook callback handlers](#example-webhook-callback-handlers)
   * [python + bottle](#python--bottle)
   * [nodejs + express](#nodejs--express)
@@ -421,6 +422,17 @@ let sign_valid = market_api_validate_signature(data, "key")
 console.log(sign_valid)
 ```
 
+### PHP library
+
+```bash
+composer require rainedot/php-nl-market
+```
+
+```php
+require("vendor/autoload.php");
+$api = new \Rainedot\PhpNlMarket\MarketAPI('YOUR_API_KEY', 1);
+$api->validateRequest(array $request); // Returns true if request is valid
+```
 
 ## Example webhook callback handlers
 ### python + bottle
