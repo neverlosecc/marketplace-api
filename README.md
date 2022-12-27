@@ -4,33 +4,36 @@
 
 * [Recent changes](#recent-changes)
 * [Webhook callbacks](#webhook-callbacks)
-  * [Balance transfer](#balance-transfer)
-  * [Item purchase](#item-purchase)
+    * [Balance transfer](#balance-transfer)
+    * [Item purchase](#item-purchase)
 * [Api requests](#api-requests)
-  * [Common parameters](#common-parameters)
-  * [Curl example](#curl-example)
-  * [Responses](#responses)
-    * [Successful response](#successful-response)
-    * [Failure response](#failure-response)
+    * [Common parameters](#common-parameters)
+    * [Request id](#request-id)
+    * [Curl example](#curl-example)
+    * [Responses](#responses)
+        * [Successful response](#successful-response)
+        * [Failure response](#failure-response)
 * [Api methods](#api-methods)
-  * [Give item to user](#give-item-to-user)
-  * [Transfer balance](#transfer-balance)
-  * [Gift product](#gift-product)
-  * [Get product prices](#get-product-prices)
-  * [Check if user exists](#check-if-user-exists)
-  * [Get NLE balance](#get-nle-balance)
+    * [Give item to user](#give-item-to-user)
+    * [Transfer balance](#transfer-balance)
+    * [Gift product](#gift-product)
+    * [Get product prices](#get-product-prices)
+    * [Check if user exists](#check-if-user-exists)
+    * [Get NLE balance](#get-nle-balance)
 * [Signature creation and validation](#signature-creation-and-validation)
-  * [Python example](#python-example)
-  * [Javascript example](#javascript-example)
-  * [PHP example](#php-library)
+    * [Python example](#python-example)
+    * [Javascript example](#javascript-example)
+    * [PHP library](#php-library)
 * [Example webhook callback handlers](#example-webhook-callback-handlers)
-  * [python + bottle](#python--bottle)
-  * [nodejs + express](#nodejs--express)
+    * [python + bottle](#python--bottle)
+    * [nodejs + express](#nodejs--express)
 
 <!-- vim-markdown-toc -->
 
 ## Recent changes
 
+- 27 Dec 2022
+  -  It's now possible to use string unique request IDs
 - 25 Apr 2022
   - Added `get-balance` method
   - Webhooks are now have `kind` parameter,   
@@ -110,6 +113,22 @@ Common parameters used in all types of actions (unless specified otherwise):
 | `user_id`   | Your user id      | You can get it on market api settings page                                       |
 | `signature` | Request signature | Refer to [signatures section](#signature-creation-and-validation)                |
 | `id`        | Unique request id | Used to prevent erroneous repetitive requests. Not needed for read-only requests |
+
+### Request id
+
+`id` parameter should be unique between requests. If you haven't received a successful response
+for your request it's safe to try it again with the same `id` parameter. If your action haven't
+been completed it will be completed with second request, and if it was, and you failed to receive
+the response previously for some unrelated reason you will receive `Invalid id.` error and you will not
+spend funds twice.
+
+**Unique id format**
+
+| Parameter          | Limitation                                                                           |
+|--------------------|--------------------------------------------------------------------------------------|
+| Type               | `integer` or `string` (`"id": 123` or `"id": "abcde123"`)                            |
+| Max length         | 80 characters (for both numbers and strings)                                         |
+| Allowed characters | lower and upper case latin alphabet, numbers, and `.-_`, whitespace is not supported |
 
 ### Curl example
 
