@@ -13,11 +13,13 @@
     * [Responses](#responses)
         * [Successful response](#successful-response)
         * [Failure response](#failure-response)
+    * [Product list](#product-list)
 * [Api methods](#api-methods)
     * [Give item to user](#give-item-to-user)
     * [Transfer balance](#transfer-balance)
     * [Gift product](#gift-product)
     * [Get product prices](#get-product-prices)
+    * [Check if user invited to product](#check-if-user-invited-to-product)
     * [Check if user exists](#check-if-user-exists)
     * [Get NLE balance](#get-nle-balance)
 * [Signature creation and validation](#signature-creation-and-validation)
@@ -32,6 +34,9 @@
 
 ## Recent changes
 
+- 08 Dec 2023
+  - Added `is-user-invited` method
+  - Updated product list
 - 27 Dec 2022
   -  It's now possible to use string unique request IDs
 - 25 Apr 2022
@@ -165,6 +170,17 @@ Successful responses may contain additional fields, refer to methods documentati
 }
 ```
 
+### Product list
+
+List of valid products you can specify in `product` request field of methods below:
+
+
+| `product` name | Game name |
+|---------------:|-----------|
+|         `csgo` | CS:GO     |
+|          `cs2` | CS2       |
+
+
 ## Api methods
 
 ### Give item to user
@@ -232,7 +248,7 @@ This request gifts `30 days` for *CS:GO* to user `darth`
 | Parameter  | Description                         |
 |------------|-------------------------------------|
 | `username` | Username that will receive product  |
-| `product`  | Only `csgo` product is available    |
+| `product`  | Product name                        |
 | `cnt`      | Upgrade type (refer to table below) |
 
 `cnt` parameter:
@@ -259,9 +275,9 @@ URL: `/api/market/get-prices`
 }
 ```
 
-| Parameter  | Description                         |
-|------------|-------------------------------------|
-| `product`  | Only `csgo` product is available    |
+| Parameter  | Description  |
+|------------|--------------|
+| `product`  | Product name |
 
 *Read-only method, `id` parameter is not needed here*
 
@@ -296,6 +312,44 @@ Response:
 ```
 
 This request will return current prices for selected product
+
+### Check if user invited to product
+**This method is available for official resellers only**
+
+URL: `/api/market/is-user-invited`
+
+```json
+{
+  "user_id": 1,
+  "username": "target_user",
+  "product": "cs2",
+  "signature": "..."
+}
+```
+
+| Parameter  | Description            |
+|------------|------------------------|
+| `product`  | Product name           |
+| `username` | Login of user to check |
+
+*Read-only method, `id` parameter is not needed here*
+
+Response:
+```json
+{
+  "succ": true,
+  "success": true,
+  "cheat_public": false, 
+  "user_invited": true
+}
+```
+
+- will return `cheat_public=true` if cheat does not require invite 
+  (`user_invited` will always be true in this case)
+- when `cheat_public=false`, `user_invited` determines whether 
+  this user is invited to this product or not. 
+- **You won't be able to gift subscription 
+  to non-invited user when cheat is not public!**
 
 ### Check if user exists
 **This method is available for official resellers only**
