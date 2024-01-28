@@ -4,31 +4,31 @@
 
 * [Recent changes](#recent-changes)
 * [Webhook callbacks](#webhook-callbacks)
-    * [Balance transfer](#balance-transfer)
-    * [Item purchase](#item-purchase)
+  * [Balance transfer](#balance-transfer)
+  * [Item purchase](#item-purchase)
 * [Api requests](#api-requests)
-    * [Common parameters](#common-parameters)
-    * [Request id](#request-id)
-    * [Curl example](#curl-example)
-    * [Responses](#responses)
-        * [Successful response](#successful-response)
-        * [Failure response](#failure-response)
-    * [Product list](#product-list)
+  * [Common parameters](#common-parameters)
+  * [Request id](#request-id)
+  * [Curl example](#curl-example)
+  * [Responses](#responses)
+    * [Successful response](#successful-response)
+    * [Failure response](#failure-response)
+  * [Product list](#product-list)
 * [Api methods](#api-methods)
-    * [Give item to user](#give-item-to-user)
-    * [Transfer balance](#transfer-balance)
-    * [Gift product](#gift-product)
-    * [Get product prices](#get-product-prices)
-    * [Check if user invited to product](#check-if-user-invited-to-product)
-    * [Check if user exists](#check-if-user-exists)
-    * [Get NLE balance](#get-nle-balance)
+  * [Give item to user](#give-item-to-user)
+  * [Transfer balance](#transfer-balance)
+  * [Gift product](#gift-product)
+  * [Get product prices](#get-product-prices)
+  * [Check if user invited to product](#check-if-user-invited-to-product)
+  * [Check if user exists](#check-if-user-exists)
+  * [Get NLE balance](#get-nle-balance)
 * [Signature creation and validation](#signature-creation-and-validation)
-    * [Python example](#python-example)
-    * [Javascript example](#javascript-example)
-    * [PHP library](#php-library)
+  * [Python example](#python-example)
+  * [Javascript example](#javascript-example)
+  * [PHP library](#php-library)
 * [Example webhook callback handlers](#example-webhook-callback-handlers)
-    * [python + bottle](#python--bottle)
-    * [nodejs + express](#nodejs--express)
+  * [python + bottle](#python--bottle)
+  * [nodejs + express](#nodejs--express)
 
 <!-- vim-markdown-toc -->
 
@@ -38,7 +38,7 @@
   - Added `is-user-invited` method
   - Updated product list
 - 27 Dec 2022
-  -  It's now possible to use string unique request IDs
+  - It's now possible to use string unique request IDs
 - 25 Apr 2022
   - Added `get-balance` method
   - Webhooks are now have `kind` parameter,   
@@ -104,12 +104,11 @@ This event is sent when your item is purchased
 | `item_id`   | Bought item code         |
 | `signature` | Event signature          |
 
-
 ## Api requests
 
 Api requests should be sent with POST method and `application/json` content-type
 
-### Common parameters 
+### Common parameters
 
 Common parameters used in all types of actions (unless specified otherwise):
 
@@ -174,37 +173,36 @@ Successful responses may contain additional fields, refer to methods documentati
 
 List of valid products you can specify in `product` request field of methods below:
 
-
 | `product` name | Game name |
 |---------------:|-----------|
 |         `csgo` | CS:GO     |
 |          `cs2` | CS2       |
 
-
 ## Api methods
 
 ### Give item to user
+
 URL: `/api/market/give-for-free`
 
 ```json
 {
   "user_id": 1,
   "id": 1338,
-  "username" : "darth", 
-  "code": "E3yugw", 
+  "username": "darth",
+  "code": "E3yugw",
   "signature": "c0e8a7fa9c9fafe16d21ad0be087a6372bb7a9256fab212ff106666a152c6e0a"
 }
 ```
 
 This request gives item `E3yugw` to user `darth`
 
-| Parameter   | Description                          |
-|-------------|--------------------------------------|
-| `username`  | Username that will receive this item |
-| `code`      | Market code of item you want to give |
-
+| Parameter  | Description                          |
+|------------|--------------------------------------|
+| `username` | Username that will receive this item |
+| `code`     | Market code of item you want to give |
 
 ### Transfer balance
+
 **This method is available for official resellers only**
 
 URL: `/api/market/transfer-money`
@@ -213,8 +211,8 @@ URL: `/api/market/transfer-money`
 {
   "user_id": 1,
   "id": 1337,
-  "username" : "a49",
-  "amount" : 2.00,
+  "username": "a49",
+  "amount": 2.00,
   "signature": "32208d45c593478eceb0e15aa0f8013a1259c1ef32f755edf2c49b9df2072aa2"
 }
 ```
@@ -226,8 +224,8 @@ This request transfers `2 NLE` to user `a49`
 | `username` | Username that will receive NLE     |
 | `amount`   | Amount of NLE you want to transfer |
 
-
 ### Gift product
+
 **This method is available for official resellers only**
 
 URL: `/api/market/gift-product`
@@ -263,6 +261,7 @@ This request gifts `30 days` for *CS:GO* to user `darth`
 For converted RUB prices refer to `get-prices` method below
 
 ### Get product prices
+
 **This method is available for official resellers only**
 
 URL: `/api/market/get-prices`
@@ -275,13 +274,14 @@ URL: `/api/market/get-prices`
 }
 ```
 
-| Parameter  | Description  |
-|------------|--------------|
-| `product`  | Product name |
+| Parameter | Description  |
+|-----------|--------------|
+| `product` | Product name |
 
 *Read-only method, `id` parameter is not needed here*
 
 Response:
+
 ```json
 {
   "succ": true,
@@ -314,6 +314,7 @@ Response:
 This request will return current prices for selected product
 
 ### Check if user invited to product
+
 **This method is available for official resellers only**
 
 URL: `/api/market/is-user-invited`
@@ -335,23 +336,25 @@ URL: `/api/market/is-user-invited`
 *Read-only method, `id` parameter is not needed here*
 
 Response:
+
 ```json
 {
   "succ": true,
   "success": true,
-  "cheat_public": false, 
+  "cheat_public": false,
   "user_invited": true
 }
 ```
 
-- will return `cheat_public=true` if cheat does not require invite 
+- will return `cheat_public=true` if cheat does not require invite
   (`user_invited` will always be true in this case)
-- when `cheat_public=false`, `user_invited` determines whether 
-  this user is invited to this product or not. 
-- **You won't be able to gift subscription 
+- when `cheat_public=false`, `user_invited` determines whether
+  this user is invited to this product or not.
+- **You won't be able to gift subscription
   to non-invited user when cheat is not public!**
 
 ### Check if user exists
+
 **This method is available for official resellers only**
 
 URL: `/api/market/is-user-exists`
@@ -371,6 +374,7 @@ URL: `/api/market/is-user-exists`
 *Read-only method, `id` parameter is not needed here*
 
 Response:
+
 ```json
 {
   "success": true,
@@ -380,7 +384,6 @@ Response:
 ```
 
 `user_exists` field will be `true` if user `darth` exists, `false` otherwise
-
 
 ### Get NLE balance
 
@@ -396,6 +399,7 @@ URL: `/api/market/get-balance`
 *Read-only method, `id` parameter is not needed here*
 
 Response:
+
 ```json
 {
   "succ": true,
@@ -412,38 +416,41 @@ Response:
 #!/usr/bin/python3
 from hashlib import sha256
 
+
 def market_api_generate_signature(j, secret):
     str_to_hash = ("".join([i + str(j[i]) for i in sorted(j)]) + secret).encode()
-    #print(str_to_hash)
+    # print(str_to_hash)
     hashed = sha256(str_to_hash).hexdigest()
     return hashed
-    
+
+
 def market_api_validate_signature(j, secret):
     nl_sig = j["signature"]
     del j["signature"]
     our_sig = market_api_generate_signature(j, secret)
     return nl_sig == our_sig
 
+
 # Validation
 
 event_data = {
-  "amount": 0.9,
-  "username": "A49",
-  "unique_id": 89968,
-  "item_id": "E3yugw",
-  "signature": "dc20a4d73447ac51689d6e03115aa135a8d734e610352dda818e830e70a60560"
+    "amount": 0.9,
+    "username": "A49",
+    "unique_id": 89968,
+    "item_id": "E3yugw",
+    "signature": "dc20a4d73447ac51689d6e03115aa135a8d734e610352dda818e830e70a60560"
 }
-assert( market_api_validate_signature(event_data, "key") == True )
+assert (market_api_validate_signature(event_data, "key") == True)
 
 # Generation
 
 request_data = {
-  "user_id": 1,
-  "id": 1337,
-  "username" : "a49",
-  "amount" : 2.00,
+    "user_id": 1,
+    "id": 1337,
+    "username": "a49",
+    "amount": 2.00,
 }
-request_data.update(signature = market_api_generate_signature(request_data, "key"))
+request_data.update(signature=market_api_generate_signature(request_data, "key"))
 ```
 
 ### Javascript example
@@ -508,6 +515,7 @@ $api->validateRequest(array $request); // Returns true if request is valid
 ```
 
 ## Example webhook callback handlers
+
 ### python + bottle
 
 ```python
@@ -519,25 +527,29 @@ from hashlib import sha256
 
 SECRET_KEY = "key"
 
+
 def market_api_generate_signature(j, secret):
-  str_to_hash = ("".join([i + str(j[i]) for i in sorted(j)]) + secret).encode()
-  hashed = sha256(str_to_hash).hexdigest()
-  return hashed
-    
+    str_to_hash = ("".join([i + str(j[i]) for i in sorted(j)]) + secret).encode()
+    hashed = sha256(str_to_hash).hexdigest()
+    return hashed
+
+
 def market_api_validate_signature(j, secret):
-  nl_sig = j["signature"]
-  del j["signature"]
-  our_sig = market_api_generate_signature(j, secret)
-  return nl_sig == our_sig
+    nl_sig = j["signature"]
+    del j["signature"]
+    our_sig = market_api_generate_signature(j, secret)
+    return nl_sig == our_sig
+
 
 @post("/on_purchase")
 def on_purchase():
-  data = request.json
-  if not market_api_validate_signature(data, SECRET_KEY):
-      return "invalid signature"
-  res =  data["username"] + " bought item https://neverlose.cc/market/item?id=" + data["item_id"] 
-  print(res, flush=True)
-  return res    
+    data = request.json
+    if not market_api_validate_signature(data, SECRET_KEY):
+        return "invalid signature"
+    res = data["username"] + " bought item https://neverlose.cc/market/item?id=" + data["item_id"]
+    print(res, flush=True)
+    return res
+
 
 app = application = bottle.Bottle()
 run(host='0.0.0.0', port=8080)
