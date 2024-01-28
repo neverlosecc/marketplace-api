@@ -1,4 +1,4 @@
-# Neverlose.cc market api docs
+# Neverlose.cc API docs
 
 <!-- vim-markdown-toc GFM -->
 
@@ -29,11 +29,18 @@
 * [Example webhook callback handlers](#example-webhook-callback-handlers)
   * [python + bottle](#python--bottle)
   * [nodejs + express](#nodejs--express)
+* [OAuth + OpenID identity provider](#oauth--openid-identity-provider)
+  * [Endpoints](#endpoints)
+  * [OAuth behavior](#oauth-behavior)
+  * [Supported OAuth scopes](#supported-oauth-scopes)
+  * [Supported OpenID Userinfo claims](#supported-openid-userinfo-claims)
 
 <!-- vim-markdown-toc -->
 
 ## Recent changes
 
+- 28 Jan 2024
+  - Added OAuth and OpenID info
 - 08 Dec 2023
   - Added `is-user-invited` method
   - Updated product list
@@ -606,3 +613,58 @@ app.post('/on_purchase', (req, res) => {
 
 app.listen(8080)
 ```
+
+## OAuth + OpenID identity provider
+
+Neverlose now supports OAuth authorization and being an OpenID idP.
+
+Supported api versions and their docs:
+
+- **OpenID Connect Core 1.0** (OIDC)
+  - https://openid.net/specs/openid-connect-core-1_0.html
+- **OAuth 2.0**
+  - https://oauth.net/2
+
+Client IDs are issued manually.  
+If you need one, please open a new support ticket and describe your use-case,
+we will gladly register your app if it meets our guidelines.
+
+### Endpoints
+
+| Endpoint      | URL                                              |
+|---------------|--------------------------------------------------|
+| Auth URI      | `https://auth2.neverlose.cc/oauth/authorize`     |
+| Token URI     | `https://auth2.neverlose.cc/oauth/token`         |
+| OIDC Userinfo | `https://auth2.neverlose.cc/oauth/oidc_userinfo` |
+
+### OAuth behavior
+
+- Supported **response types**: `code`
+- Supported **grant types**: `authorization_code`
+- **Refresh tokens** are **NEVER** issued, access_token expire time can be adjusted at request
+- **`state` parameter** is required unless `no_state` is in scope
+- **PKCE** (`code_challenge`) is required unless you have good reason to not implement it.
+  `no_pkce` will not work unless you are permitted to use it
+- **PKCE** **S256** is the only supported challenge method (`plain` is not supported)
+
+### Supported OAuth scopes
+
+| Scope      | Description                                                                 |
+|------------|-----------------------------------------------------------------------------|
+| `profile`  | Read access to user's login and profile picture                             |
+| `email`    | Read access to user's email                                                 |
+| `openid`   | Required to access OIDC endpoints                                           |
+| `no_state` | Allows to omit state parameter during auth flow                             |
+| `no_pkce`  | Allows to skip/omit PKCE during auth flow<br/>(requires special permission) |
+
+### Supported OpenID Userinfo claims
+
+| Field                | Content                                             | Scope needed |
+|----------------------|-----------------------------------------------------|--------------|
+| `sub`                | Numeric user id (presented as string per OIDC spec) | `openid`     |
+| `preferred_username` | User's login                                        | `profile`    |
+| `name`               | User's login                                        | `profile`    |
+| `profile`            | URL to user's profile (forum)                       | `profile`    |
+| `picture`            | URL to user's profile picture (PNG)                 | `profile`    |
+| `email`              | User's email                                        | `email`      |
+
