@@ -152,11 +152,11 @@ spend funds twice.
 
 **Unique id format**
 
-| Parameter          | Limitation                                                                           |
-|--------------------|--------------------------------------------------------------------------------------|
-| Type               | `integer` or `string` (`"id": 123` or `"id": "abcde123"`)                            |
-| Max length         | 80 characters (for both numbers and strings)                                         |
-| Allowed characters | lower and upper case latin alphabet, numbers, and `.-_`, whitespace is not supported |
+| Parameter          | Limitation                                                                                                            |
+|--------------------|-----------------------------------------------------------------------------------------------------------------------|
+| Type               | `integer` or `string` (`"id": 123` or `"id": "abcde123"`)                                                             |
+| Max length         | 80 characters (for both numbers and strings)                                                                          |
+| Allowed characters | **Lower** and **upper** case **latin** alphabet, **numbers**, and `.-_` are supported.<br>Whitespace is not supported |
 
 ### Curl example
 
