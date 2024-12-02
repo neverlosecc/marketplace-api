@@ -4,41 +4,44 @@
 
 * [Recent changes](#recent-changes)
 * [Webhook callbacks](#webhook-callbacks)
-  * [Balance transfer](#balance-transfer)
-  * [Item purchase](#item-purchase)
-* [Api requests](#api-requests)
-  * [Common parameters](#common-parameters)
-  * [Request id](#request-id)
-  * [Curl example](#curl-example)
-  * [Responses](#responses)
-    * [Successful response](#successful-response)
-    * [Failure response](#failure-response)
-  * [Product list](#product-list)
+    * [Balance transfer](#balance-transfer)
+    * [Item purchase](#item-purchase)
+* [API requests](#api-requests)
+    * [Endpoint](#endpoint)
+    * [Common parameters](#common-parameters)
+    * [Request id](#request-id)
+    * [Curl example](#curl-example)
+    * [Responses](#responses)
+        * [Successful response](#successful-response)
+        * [Failure response](#failure-response)
+    * [Product list](#product-list)
 * [Api methods](#api-methods)
-  * [Give item to user](#give-item-to-user)
-  * [Transfer balance](#transfer-balance)
-  * [Gift product](#gift-product)
-  * [Get product prices](#get-product-prices)
-  * [Check if user invited to product](#check-if-user-invited-to-product)
-  * [Check if user exists](#check-if-user-exists)
-  * [Get NLE balance](#get-nle-balance)
+    * [Give item to user](#give-item-to-user)
+    * [Transfer balance](#transfer-balance)
+    * [Gift product](#gift-product)
+    * [Get product prices](#get-product-prices)
+    * [Check if user invited to product](#check-if-user-invited-to-product)
+    * [Check if user exists](#check-if-user-exists)
+    * [Get NLE balance](#get-nle-balance)
 * [Signature creation and validation](#signature-creation-and-validation)
-  * [Python example](#python-example)
-  * [Javascript example](#javascript-example)
-  * [PHP library](#php-library)
+    * [Python example](#python-example)
+    * [Javascript example](#javascript-example)
+    * [PHP library](#php-library)
 * [Example webhook callback handlers](#example-webhook-callback-handlers)
-  * [python + bottle](#python--bottle)
-  * [nodejs + express](#nodejs--express)
+    * [python + bottle](#python--bottle)
+    * [nodejs + express](#nodejs--express)
 * [OAuth + OpenID identity provider](#oauth--openid-identity-provider)
-  * [Endpoints](#endpoints)
-  * [OAuth behavior](#oauth-behavior)
-  * [Supported OAuth scopes](#supported-oauth-scopes)
-  * [Supported OpenID Userinfo claims](#supported-openid-userinfo-claims)
+    * [Endpoints](#endpoints)
+    * [OAuth behavior](#oauth-behavior)
+    * [Supported OAuth scopes](#supported-oauth-scopes)
+    * [Supported OpenID Userinfo claims](#supported-openid-userinfo-claims)
 
 <!-- vim-markdown-toc -->
 
 ## Recent changes
 
+- 02 Dec 2024
+  - New api domain / endpoint
 - 28 Jan 2024
   - Added OAuth and OpenID info
 - 08 Dec 2023
@@ -111,9 +114,23 @@ This event is sent when your item is purchased
 | `item_id`   | Bought item code         |
 | `signature` | Event signature          |
 
-## Api requests
+## API requests
 
-Api requests should be sent with POST method and `application/json` content-type
+### Endpoint
+
+API domain is:
+
+`user-api.neverlose.cc`
+
+Marketplace API endpoint is:
+
+`user-api.neverlose.cc/api/market/<method>`
+
+API requests should be sent with **POST** method and `Content-Type: application/json` 
+
+> [!WARNING]
+> Use of old domain/endpoint `neverlose.cc/api/market` is still supported but discouraged.  
+> Users are advised to migrate to new endpoint as soon as possible
 
 ### Common parameters
 
