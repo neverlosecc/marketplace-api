@@ -161,7 +161,7 @@ spend funds twice.
 ### Curl example
 
 ```bash
-curl 'https://neverlose.cc/api/market/give-for-free' \
+curl 'https://user-api.neverlose.cc/api/market/give-for-free' \
   --data '{"user_id": 1, "signature": "..."}' \
   -X POST --header "Content-Type: application/json"
 ```
