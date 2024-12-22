@@ -792,8 +792,7 @@ Mainstream JWT libraries should check these fields automatically (you'll only ne
 > We strongly encourage you to use proper JWT library for your language that properly checks token signature.  
 > This is important to avoid phishing attacks and scam attempts.
 
-Payload fields:
-
+**Payload fields:**
 
 | Field                 | Description                                                                                          |
 |-----------------------|------------------------------------------------------------------------------------------------------|
@@ -810,3 +809,37 @@ or directly to order confirmation if you have only one method available for cust
 
 After confirming user's payment, you should gift the product or transfer funds to login 
 that was previously specified in JWT token using usual methods `gift-product` and `transfer-money` 
+
+**Full payload example:**
+
+For product:
+
+```json
+{
+  "iss": "NLRI",
+  "iat": 1734899417,
+  "exp": 1734903017,
+  "integration_id": 100,
+  "product": "cs2",
+  "cnt": 0,
+  "login": "a47",
+  "market": false,
+  "days": 30
+}
+```
+
+For market:
+
+```json
+{
+  "iss": "NLRI",
+  "iat": 1734899417,
+  "exp": 1734903017,
+  "integration_id": 100,
+  "product": "marketplace",
+  "cnt": null,
+  "login": "a47",
+  "market": true,
+  "nle": "13.37"
+}
+```
