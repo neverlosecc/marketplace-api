@@ -15,7 +15,7 @@
         * [Successful response](#successful-response)
         * [Failure response](#failure-response)
     * [Product list](#product-list)
-* [Api methods](#api-methods)
+* [API methods](#api-methods)
     * [Give item to user](#give-item-to-user)
     * [Transfer balance](#transfer-balance)
     * [Gift product](#gift-product)
@@ -35,11 +35,17 @@
     * [OAuth behavior](#oauth-behavior)
     * [Supported OAuth scopes](#supported-oauth-scopes)
     * [Supported OpenID Userinfo claims](#supported-openid-userinfo-claims)
+* [Reseller integration](#reseller-integration)
+    * [How it works?](#how-it-works)
+    * [Providing your prices](#providing-your-prices)
+    * [JWT token contents](#jwt-token-contents)
 
 <!-- vim-markdown-toc -->
 
 ## Recent changes
 
+- 22 Dec 2024
+  - Add native reseller integration docs
 - 02 Dec 2024
   - New api domain / endpoint
 - 28 Jan 2024
@@ -202,7 +208,7 @@ List of valid products you can specify in `product` request field of methods bel
 |         `csgo` | CS:GO     |
 |          `cs2` | CS2       |
 
-## Api methods
+## API methods
 
 ### Give item to user
 
@@ -685,3 +691,122 @@ we will gladly register your app if it meets our guidelines.
 | `picture`            | URL to user's profile picture (PNG)                 | `profile`    |
 | `email`              | User's email                                        | `email`      |
 
+## Reseller integration
+
+Reseller integration provides a way for you to integrate your service
+into our payment/checkout UI.  
+You can set up your integration at API settings page. If you don't see
+"Reseller integration" settings section, and you're willing to use it,
+please contact us through tickets section.
+
+### How it works?
+
+When user clicks on your payment method in our checkout UI, they will be
+redirected to your website (provided in Redirect URL in market API settings),
+and redirect URL will contain a query argument `nl_purchase` that hold JWT token with information 
+about purchase. For example:
+
+**Redirect URL in settings**: `https://test.local/checkout`  
+
+**User will be redirected to**: `https://test.local/checkout?nl_purchase=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZXN0IjoicGF5bG9hZCIsImZvbyI6ImJhciIsImlzcyI6Ik5MUkkiLCJleHAiOjB9.yNvxOjAE0K8ns4YiMI7oV8XV3R8qGpf2my0HHQGDO_I`  
+
+JWT payload format is explained in latter section 
+
+### Providing your prices
+
+User will also see your actual prices in our checkout UI if you provide them.  
+You can provide your prices using this market api method:
+
+URL: `/api/market/set-reseller-prices`
+
+```json
+{
+  "user_id": 1,
+  "integration_id": 100,
+  "prices": {
+    "cs2": {"EUR":  ["30.50", "31.30"], "USD":  ["31.82", "32.65"]},
+    "csgo": {"EUR":  "14.10", "USD":  "14.71", "XMR": "0.162"},
+    "marketplace": {"EUR": "1.1", "USD":  "1.15"}
+  },
+  "signature": "..."
+}
+```
+
+| Parameter        | Description                                                  |
+|------------------|--------------------------------------------------------------|
+| `integration_id` | ID of your reseller integration (check on api settings page) |
+| `prices`         | Product-Currency-Price object (explained below)              |
+
+Response will be simple `success: true|false` response
+
+Price set using this method will automatically expire after 24 hours, so you should
+update them periodically using automatic script, otherwise prices will disappear from checkout UI.  
+You can check remaining time until expiration on API settings page. We recommend you to update 
+prices **each hour** if they are changed frequently and/or dynamically. Otherwise, if your prices 
+are set manually and mostly static, we recommend you to update them **each 12 hours.**
+
+**Prices object:**
+
+Example describes the following prices:
+
+- You sell CS2 for:
+  - from 30.50 to 31.30 EUR
+  - from 31.82 to 32.65 USD
+  - *This means that you have multiple payment methods for this product that fit specified price range*
+- You sell CS:GO for:
+  - 14.10 EUR
+  - 14.71 USD
+  - 0.162 XMR
+  - *In this case there's exactly one price for all methods available for this product*
+- You sell **1 NLE** for:
+  - 1.1 EUR
+  - 1.15 USD
+
+Rules:
+
+- First level key should be product name (see method `gift-product`)
+  - Special product `marketplace` sets price for **1 NLE** market topup 
+  - 2nd level key is currency name
+    - Currency name should be exactly 3 uppercase latin letters. Any other names will result in invalid format error.
+    - 2nd level value is price or price range for this product in this currency
+      - Decimal values should be passed as strings to avoid rounding errors
+      - To specify a *range* you should pass array with exactly 2 elements
+        - First price in a range should be less than second one
+      - To specify singular price you should pass number string as value without array
+
+
+### JWT token contents
+
+JWT token passed to your redirect URL (see "How it works?" section above) is constructed as following:
+
+- Algorithm: `HS256`
+- Secret key: your Neverlose API key
+- Claims:
+  - `iss` (Issuer) - always `NLRI`
+  - `iat` (Issued at) - order creation timestamp
+  - `exp` (Expire) - timestamp at which this token is not valid anymore (currently iat + 1 hour)
+
+Mainstream JWT libraries should check these fields automatically (you'll only need to provide valid Issuer).
+
+> [!CAUTION]
+> We strongly encourage you to use proper JWT library for your language that properly checks token signature.  
+> This is important to avoid phishing attacks and scam attempts.
+
+Payload fields:
+
+
+| Field                 | Description                                                                                          |
+|-----------------------|------------------------------------------------------------------------------------------------------|
+| `integration_id`      | ID of your reseller integration                                                                      |
+| `login`               | Login of user that should receive the order                                                          |
+| `product`             | Product name that user ordered (same names as in `gift-product`); `marketplace` if market top-up     |
+| `market`              | `true` if NLE (market top-up) order, `false` if product order                                        |
+| `cnt`                 | Plan number requested by user (same as in `gift-product`), `null` for market                         |
+| `days` (product only) | Number of days to gift to user (provided for convenience, always in sync with `cnt` field)           |
+| `nle` (market only)   | NLE amount requested by user (Decimal number **presented as string**, with `.` as decimal separator) |
+
+After receiving this redirect you should direct user directly to payment method selection, 
+or directly to order confirmation if you have only one method available for customers of this product.
+
+After confirming user's payment, you should gift the product or transfer funds to login 
+that was previously specified in JWT token using usual methods `gift-product` and `transfer-money` 
