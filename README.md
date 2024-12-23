@@ -806,6 +806,7 @@ Mainstream JWT libraries should check these fields automatically (you'll only ne
 |-----------------------|------------------------------------------------------------------------------------------------------|
 | `integration_id`      | ID of your reseller integration                                                                      |
 | `login`               | Login of user that should receive the order                                                          |
+| `email`               | Email of receiving user                                                                              |
 | `product`             | Product name that user ordered (same names as in `gift-product`); `marketplace` if market top-up     |
 | `market`              | `true` if NLE (market top-up) order, `false` if product order                                        |
 | `cnt`                 | Plan number requested by user (same as in `gift-product`), `null` for market                         |
@@ -831,6 +832,7 @@ For product:
   "product": "cs2",
   "cnt": 0,
   "login": "a47",
+  "email": "foo@bar.baz",
   "market": false,
   "days": 30
 }
@@ -847,6 +849,7 @@ For market:
   "product": "marketplace",
   "cnt": null,
   "login": "a47",
+  "email": "foo@bar.baz",
   "market": true,
   "nle": "13.37"
 }
