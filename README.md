@@ -775,6 +775,7 @@ Rules:
   - Special product `marketplace` sets price for **1 NLE** market topup 
   - 2nd level key is currency name
     - Currency name should be exactly 3 uppercase latin letters. Any other names will result in invalid format error.
+    - This object should contain up to 3 currencies. Specifying more currencies will result in an error
     - 2nd level value is price or price range for this product in this currency
       - Decimal values should be passed as strings to avoid rounding errors
       - To specify a *range* you should pass array with exactly 2 elements
