@@ -759,16 +759,17 @@ Note that you need to **first compose prices object**, **serialize it to json**,
 algorithm compatible. Example pseudo-Javascript code:
 
 ```js
-const request = JSON.stringify({
+const request = {
   user_id: 1,
   integration_id: 100,
   prices: JSON.stringify({
     cs2: {...},
     csgo: {...}
   })
-})
+}
 request.signature = generateSignature(request)
-fetch("...", {method: "POST", body: request, ...})
+const requestJson = JSON.stringify(request)
+fetch("...", {method: "POST", body: requestJson, ...})
 ```
 
 Price set using this method will automatically expire after 24 hours, so you should
