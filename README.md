@@ -726,25 +726,50 @@ You can provide your prices using this market api method:
 
 URL: `/api/market/set-reseller-prices`
 
+**Prices object:**
+
+```json
+{
+    "cs2": {"EUR":  ["30.50", "31.30"], "USD":  ["31.82", "32.65"]},
+    "csgo": {"EUR":  "14.10", "USD":  "14.71", "XMR": "0.162"},
+    "marketplace": {"EUR": "1.1", "USD":  "1.15"}
+}
+```
+
+**Request:**
+
 ```json
 {
   "user_id": 1,
   "integration_id": 100,
-  "prices": {
-    "cs2": {"EUR":  ["30.50", "31.30"], "USD":  ["31.82", "32.65"]},
-    "csgo": {"EUR":  "14.10", "USD":  "14.71", "XMR": "0.162"},
-    "marketplace": {"EUR": "1.1", "USD":  "1.15"}
-  },
+  "prices": "<prices json>",
   "signature": "..."
 }
 ```
 
-| Parameter        | Description                                                  |
-|------------------|--------------------------------------------------------------|
-| `integration_id` | ID of your reseller integration (check on api settings page) |
-| `prices`         | Product-Currency-Price object (explained below)              |
+| Parameter        | Description                                                    |
+|------------------|----------------------------------------------------------------|
+| `integration_id` | ID of your reseller integration (check on api settings page)   |
+| `prices`         | Product-Currency-Price object in JSON string (explained below) |
 
 Response will be simple `success: true|false` response
+
+Note that you need to **first compose prices object**, **serialize it to json**, then 
+**put it as string** to `"prices"` key of request object. This is necessary to keep signature 
+algorithm compatible. Example pseudo-Javascript code:
+
+```js
+const request = JSON.stringify({
+  user_id: 1,
+  integration_id: 100,
+  prices: JSON.stringify({
+    cs2: {...},
+    csgo: {...}
+  })
+})
+request.signature = generateSignature(request)
+fetch("...", {method: "POST", body: request, ...})
+```
 
 Price set using this method will automatically expire after 24 hours, so you should
 update them periodically using automatic script, otherwise prices will disappear from checkout UI.  
