@@ -712,6 +712,13 @@ about purchase. For example:
 
 JWT payload format is explained in latter section 
 
+After creating your integration and specifying valid Redirect URL,
+your payment method will be present in method dropdown on product purchase page.
+
+Please note that until you enable **Public** checkbox, your method is visible only
+to you. You can use this private method to test your integration and set it to public as 
+soon as integration is ready.
+
 ### Providing your prices
 
 User will also see your actual prices in our checkout UI if you provide them.  
