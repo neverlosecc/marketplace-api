@@ -799,8 +799,8 @@ Rules:
 
 - First level key should be in format `<product_name>-<days>` 
   - Product names are same as in `gift-product` method
-  - `days` should be existing plan as days count (30, 90, 180, etc.)
-    - If you don't specify plan in key it will default to 30 days  
+  - `days` should be existing plan presented as days count (30, 90, 180, etc.)
+    - If you don't specify plan in key it will default to 30 days (i.e. `"cs2"` is same as `"cs2-30"`)
   - Special product `marketplace` sets price for **1 NLE** market topup
   - 2nd level key is currency name
     - Currency name should be exactly 3 uppercase latin letters. Any other names will result in invalid format error.
