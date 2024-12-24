@@ -730,8 +730,8 @@ URL: `/api/market/set-reseller-prices`
 
 ```json
 {
-  "cs2": {"EUR":  ["30.50", "31.30"], "USD":  ["31.82", "32.65"]},
-  "csgo": {"EUR":  "14.10", "USD":  "14.71", "XMR": "0.162"},
+  "cs2-30": {"EUR":  ["30.50", "31.30"], "USD":  ["31.82", "32.65"]},
+  "csgo-180": {"EUR":  "14.10", "USD":  "14.71", "XMR": "0.162"},
   "marketplace": {"EUR": "1.1", "USD":  "1.15"}
 }
 ```
@@ -763,8 +763,8 @@ const request = {
   user_id: 1,
   integration_id: 100,
   prices: JSON.stringify({
-    cs2: {...},
-    csgo: {...}
+    "cs2-30": {...},
+    "csgo-180": {...}
   })
 }
 request.signature = generateSignature(request)
@@ -782,11 +782,11 @@ are set manually and mostly static, we recommend you to update them **each 12 ho
 
 Example describes the following prices:
 
-- You sell CS2 for:
+- You sell CS2 (30 days) for:
   - from 30.50 to 31.30 EUR
   - from 31.82 to 32.65 USD
   - *This means that you have multiple payment methods for this product that fit specified price range*
-- You sell CS:GO for:
+- You sell CS:GO (180 days) for:
   - 14.10 EUR
   - 14.71 USD
   - 0.162 XMR
@@ -797,8 +797,11 @@ Example describes the following prices:
 
 Rules:
 
-- First level key should be product name (see method `gift-product`)
-  - Special product `marketplace` sets price for **1 NLE** market topup 
+- First level key should be in format `<product_name>-<days>` 
+  - Product names are same as in `gift-product` method
+  - `days` should be existing plan as days count (30, 90, 180, etc.)
+    - If you don't specify plan in key it will default to 30 days  
+  - Special product `marketplace` sets price for **1 NLE** market topup
   - 2nd level key is currency name
     - Currency name should be exactly 3 uppercase latin letters. Any other names will result in invalid format error.
     - This object should contain up to 3 currencies. Specifying more currencies will result in an error
