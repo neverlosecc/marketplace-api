@@ -37,6 +37,7 @@
     * [Supported OpenID Userinfo claims](#supported-openid-userinfo-claims)
 * [Reseller integration](#reseller-integration)
     * [How it works?](#how-it-works)
+    * [Setting integration visibiliy using API](#setting-integration-visibiliy-using-api)
     * [Providing your prices](#providing-your-prices)
     * [JWT token contents](#jwt-token-contents)
 
@@ -44,6 +45,8 @@
 
 ## Recent changes
 
+- 14 Apr 2025
+  - Added integration-visibility endpoint
 - 22 Dec 2024
   - Add native reseller integration docs
 - 02 Dec 2024
@@ -90,7 +93,7 @@ This event is sent when balance is transferred to your account
 ```
 
 | Parameter   | Description              |
-|-------------|--------------------------|
+| ----------- | ------------------------ |
 | `kind`      | Event type               |
 | `amount`    | Amount received          |
 | `username`  | Sender username          |
@@ -113,7 +116,7 @@ This event is sent when your item is purchased
 ```
 
 | Parameter   | Description              |
-|-------------|--------------------------|
+| ----------- | ------------------------ |
 | `kind`      | Event type               |
 | `username`  | Buyer                    |
 | `unique_id` | Incrementing purchase id |
@@ -143,7 +146,7 @@ API requests should be sent with **POST** method and `Content-Type: application/
 Common parameters used in all types of actions (unless specified otherwise):
 
 | Parameter   | Description       | Additional                                                                       |
-|-------------|-------------------|----------------------------------------------------------------------------------|
+| ----------- | ----------------- | -------------------------------------------------------------------------------- |
 | `user_id`   | Your user id      | You can get it on market api settings page                                       |
 | `signature` | Request signature | Refer to [signatures section](#signature-creation-and-validation)                |
 | `id`        | Unique request id | Used to prevent erroneous repetitive requests. Not needed for read-only requests |
@@ -159,7 +162,7 @@ spend funds twice.
 **Unique id format**
 
 | Parameter          | Limitation                                                                                                            |
-|--------------------|-----------------------------------------------------------------------------------------------------------------------|
+| ------------------ | --------------------------------------------------------------------------------------------------------------------- |
 | Type               | `integer` or `string` (`"id": 123` or `"id": "abcde123"`)                                                             |
 | Max length         | 80 characters (for both numbers and strings)                                                                          |
 | Allowed characters | **Lower** and **upper** case **latin** alphabet, **numbers**, and `.-_` are supported.<br>Whitespace is not supported |
@@ -204,7 +207,7 @@ Successful responses may contain additional fields, refer to methods documentati
 List of valid products you can specify in `product` request field of methods below:
 
 | `product` name | Game name |
-|---------------:|-----------|
+| -------------: | --------- |
 |         `csgo` | CS:GO     |
 |          `cs2` | CS2       |
 
@@ -227,7 +230,7 @@ URL: `/api/market/give-for-free`
 This request gives item `E3yugw` to user `darth`
 
 | Parameter  | Description                          |
-|------------|--------------------------------------|
+| ---------- | ------------------------------------ |
 | `username` | Username that will receive this item |
 | `code`     | Market code of item you want to give |
 
@@ -250,7 +253,7 @@ URL: `/api/market/transfer-money`
 This request transfers `2 NLE` to user `a49`
 
 | Parameter  | Description                        |
-|------------|------------------------------------|
+| ---------- | ---------------------------------- |
 | `username` | Username that will receive NLE     |
 | `amount`   | Amount of NLE you want to transfer |
 
@@ -274,7 +277,7 @@ URL: `/api/market/gift-product`
 This request gifts `30 days` for *CS:GO* to user `darth`
 
 | Parameter  | Description                         |
-|------------|-------------------------------------|
+| ---------- | ----------------------------------- |
 | `username` | Username that will receive product  |
 | `product`  | Product name                        |
 | `cnt`      | Upgrade type (refer to table below) |
@@ -282,7 +285,7 @@ This request gifts `30 days` for *CS:GO* to user `darth`
 `cnt` parameter:
 
 | `cnt` | Price     | Days |
-|-------|-----------|------|
+| ----- | --------- | ---- |
 | `0`   | 17.1 NLE  | 30   |
 | `1`   | 44.1 NLE  | 90   |
 | `2`   | 80.1 NLE  | 180  |
@@ -305,7 +308,7 @@ URL: `/api/market/get-prices`
 ```
 
 | Parameter | Description  |
-|-----------|--------------|
+| --------- | ------------ |
 | `product` | Product name |
 
 *Read-only method, `id` parameter is not needed here*
@@ -359,7 +362,7 @@ URL: `/api/market/is-user-invited`
 ```
 
 | Parameter  | Description            |
-|------------|------------------------|
+| ---------- | ---------------------- |
 | `product`  | Product name           |
 | `username` | Login of user to check |
 
@@ -398,7 +401,7 @@ URL: `/api/market/is-user-exists`
 ```
 
 | Parameter  | Description       |
-|------------|-------------------|
+| ---------- | ----------------- |
 | `username` | Username to check |
 
 *Read-only method, `id` parameter is not needed here*
@@ -655,7 +658,7 @@ we will gladly register your app if it meets our guidelines.
 ### Endpoints
 
 | Endpoint      | URL                                              |
-|---------------|--------------------------------------------------|
+| ------------- | ------------------------------------------------ |
 | Auth URI      | `https://auth2.neverlose.cc/oauth/authorize`     |
 | Token URI     | `https://auth2.neverlose.cc/oauth/token`         |
 | OIDC Userinfo | `https://auth2.neverlose.cc/oauth/oidc_userinfo` |
@@ -673,7 +676,7 @@ we will gladly register your app if it meets our guidelines.
 ### Supported OAuth scopes
 
 | Scope      | Description                                                                 |
-|------------|-----------------------------------------------------------------------------|
+| ---------- | --------------------------------------------------------------------------- |
 | `profile`  | Read access to user's login and profile picture                             |
 | `email`    | Read access to user's email                                                 |
 | `openid`   | Required to access OIDC endpoints                                           |
@@ -683,7 +686,7 @@ we will gladly register your app if it meets our guidelines.
 ### Supported OpenID Userinfo claims
 
 | Field                | Content                                             | Scope needed |
-|----------------------|-----------------------------------------------------|--------------|
+| -------------------- | --------------------------------------------------- | ------------ |
 | `sub`                | Numeric user id (presented as string per OIDC spec) | `openid`     |
 | `preferred_username` | User's login                                        | `profile`    |
 | `name`               | User's login                                        | `profile`    |
@@ -719,6 +722,30 @@ Please note that until you enable **Public** checkbox, your method is visible on
 to you. You can use this private method to test your integration and set it to public as 
 soon as integration is ready.
 
+### Setting integration visibiliy using API
+
+You can toggle "Public" checkbox using API.  
+S
+
+URL: `/api/market/integration-visibility`
+
+**Request:**
+
+```json
+{
+  "user_id": 1,
+  "integration_id": 100,
+  "is_public": true
+}
+```
+
+| Parameter        | Description                                                                  |
+| ---------------- | ---------------------------------------------------------------------------- |
+| `integration_id` | ID of your reseller integration (check on api settings page)                 |
+| `is_public`      | Visibility status: `true` for public (visible), `false` for hidden (testing) |
+
+Response will be simple `success: true|false` response
+
 ### Providing your prices
 
 User will also see your actual prices in our checkout UI if you provide them.  
@@ -748,7 +775,7 @@ URL: `/api/market/set-reseller-prices`
 ```
 
 | Parameter        | Description                                                    |
-|------------------|----------------------------------------------------------------|
+| ---------------- | -------------------------------------------------------------- |
 | `integration_id` | ID of your reseller integration (check on api settings page)   |
 | `prices`         | Product-Currency-Price object in JSON string (explained below) |
 
@@ -832,7 +859,7 @@ Mainstream JWT libraries should check these fields automatically (you'll only ne
 **Payload fields:**
 
 | Field                 | Description                                                                                          |
-|-----------------------|------------------------------------------------------------------------------------------------------|
+| --------------------- | ---------------------------------------------------------------------------------------------------- |
 | `integration_id`      | ID of your reseller integration                                                                      |
 | `login`               | Login of user that should receive the order                                                          |
 | `email`               | Email of receiving user                                                                              |
