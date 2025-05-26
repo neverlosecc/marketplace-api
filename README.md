@@ -27,6 +27,7 @@
     * [Python example](#python-example)
     * [Javascript example](#javascript-example)
     * [PHP library](#php-library)
+    * [JavaScript & TypeScript SDK](#javascript--typescript-sdk)
 * [Example webhook callback handlers](#example-webhook-callback-handlers)
     * [python + bottle](#python--bottle)
     * [nodejs + express](#nodejs--express)
