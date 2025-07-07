@@ -45,6 +45,8 @@
 
 ## Recent changes
 
+- 07 Jul 2025
+  - Added `cc.neverlose.reg_date` OpenID claim
 - 14 Apr 2025
   - Added integration-visibility endpoint
 - 22 Dec 2024
@@ -685,14 +687,15 @@ we will gladly register your app if it meets our guidelines.
 
 ### Supported OpenID Userinfo claims
 
-| Field                | Content                                             | Scope needed |
-| -------------------- | --------------------------------------------------- | ------------ |
-| `sub`                | Numeric user id (presented as string per OIDC spec) | `openid`     |
-| `preferred_username` | User's login                                        | `profile`    |
-| `name`               | User's login                                        | `profile`    |
-| `profile`            | URL to user's profile (forum)                       | `profile`    |
-| `picture`            | URL to user's profile picture (PNG)                 | `profile`    |
-| `email`              | User's email                                        | `email`      |
+| Field                   | Content                                             | Scope needed |
+| ----------------------- | --------------------------------------------------- | ------------ |
+| `sub`                   | Numeric user id (presented as string per OIDC spec) | `openid`     |
+| `preferred_username`    | User's login                                        | `profile`    |
+| `name`                  | User's login                                        | `profile`    |
+| `profile`               | URL to user's profile (forum)                       | `profile`    |
+| `picture`               | URL to user's profile picture (PNG)                 | `profile`    |
+| `email`                 | User's email                                        | `email`      |
+| `cc.neverlose.reg_date` | Registration date in `YYYY-MM-DD` format            | `profile`    |
 
 ## Reseller integration
 
