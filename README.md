@@ -45,6 +45,9 @@
 
 ## Recent changes
 
+- 17 Mar 2026
+  - Added `id_token` documentation
+  - Updated endpoints documetation to refer to Discovery uri
 - 07 Jul 2025
   - Added `cc.neverlose.reg_date` OpenID claim
 - 14 Apr 2025
@@ -646,12 +649,13 @@ app.listen(8080)
 
 Neverlose now supports OAuth authorization and being an OpenID idP.
 
-Supported api versions and their docs:
+Supported api versions and their specifications:
 
-- **OpenID Connect Core 1.0** (OIDC)
-  - https://openid.net/specs/openid-connect-core-1_0.html
-- **OAuth 2.0**
-  - https://oauth.net/2
+| Spec                               | Documentation                                                |
+| ---------------------------------- | ------------------------------------------------------------ |
+| **OAuth 2.0**                      | <https://oauth.net/2>                                        |
+| **OpenID Connect Core 1.0** (OIDC) | <https://openid.net/specs/openid-connect-core-1_0.html>      |
+| **OpenID Connect Discovery 1.0**   | <https://openid.net/specs/openid-connect-discovery-1_0.html> |
 
 Client IDs are issued manually.  
 If you need one, please open a new support ticket and describe your use-case,
@@ -659,11 +663,32 @@ we will gladly register your app if it meets our guidelines.
 
 ### Endpoints
 
-| Endpoint      | URL                                              |
-| ------------- | ------------------------------------------------ |
-| Auth URI      | `https://auth2.neverlose.cc/oauth/authorize`     |
-| Token URI     | `https://auth2.neverlose.cc/oauth/token`         |
-| OIDC Userinfo | `https://auth2.neverlose.cc/oauth/oidc_userinfo` |
+| Endpoint           | URL                                                     |
+| ------------------ | ------------------------------------------------------- |
+| OIDC discovery URI | `https://neverlose.cc/.well-known/openid-configuration` |
+
+Please refer to [openid-configuration](https://neverlose.cc/.well-known/openid-configuration) for current endpoints (authorization, token, userinfo) and other parameters
+
+### ID token contents
+
+> [!NOTE]
+> Previously, our idP was not fully OIDC complaiant as it was not providing an `id_token`.
+> This is now fixed
+
+Available fields:
+
+| Field     | Description                                                    |
+| --------- | -------------------------------------------------------------- |
+| `iss`     | **Issuer**, always `https://neverlose.cc`                      |
+| `iat`     | **Issued at**, timestamp of token creation                     |
+| `exp`     | **Expiration timestamp**, same as access token lifetime        |
+| `sub`     | **Subject**, user ID, same as in userinfo endpoint             |
+| `aud`     | **Audience**, client_id of your app (as string)                |
+| `nonce`   | Nonce provided when redirecting user to authorization endpoint |
+| `at_hash` | Hash of `access_token` as specified in OIDC spec                 |
+
+ID Token is signed with key provided at `jwks_uri` in openid-configuration
+
 
 ### OAuth behavior
 
