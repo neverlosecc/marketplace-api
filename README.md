@@ -32,6 +32,7 @@
     * [nodejs + express](#nodejs--express)
 * [OAuth + OpenID identity provider](#oauth--openid-identity-provider)
     * [Endpoints](#endpoints)
+    * [ID token contents](#id-token-contents)
     * [OAuth behavior](#oauth-behavior)
     * [Supported OAuth scopes](#supported-oauth-scopes)
     * [Supported OpenID Userinfo claims](#supported-openid-userinfo-claims)
