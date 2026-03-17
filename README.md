@@ -48,6 +48,7 @@
 - 17 Mar 2026
   - Added `id_token` documentation
   - Updated endpoints documetation to refer to Discovery uri
+  - Added `cc.neverlose.{user_id,login}` claims
 - 07 Jul 2025
   - Added `cc.neverlose.reg_date` OpenID claim
 - 14 Apr 2025
@@ -685,7 +686,7 @@ Available fields:
 | `sub`     | **Subject**, user ID, same as in userinfo endpoint             |
 | `aud`     | **Audience**, client_id of your app (as string)                |
 | `nonce`   | Nonce provided when redirecting user to authorization endpoint |
-| `at_hash` | Hash of `access_token` as specified in OIDC spec                 |
+| `at_hash` | Hash of `access_token` as specified in OIDC spec               |
 
 ID Token is signed with key provided at `jwks_uri` in openid-configuration
 
@@ -714,13 +715,15 @@ ID Token is signed with key provided at `jwks_uri` in openid-configuration
 
 | Field                   | Content                                             | Scope needed |
 | ----------------------- | --------------------------------------------------- | ------------ |
-| `sub`                   | Numeric user id (presented as string per OIDC spec) | `openid`     |
+| `sub`                   | Numeric user ID (presented as string per OIDC spec) | `openid`     |
 | `preferred_username`    | User's login                                        | `profile`    |
 | `name`                  | User's login                                        | `profile`    |
 | `profile`               | URL to user's profile (forum)                       | `profile`    |
 | `picture`               | URL to user's profile picture (PNG)                 | `profile`    |
 | `email`                 | User's email                                        | `email`      |
-| `cc.neverlose.reg_date` | Registration date in `YYYY-MM-DD` format            | `profile`    |
+| `cc.neverlose.reg_date` | Registration date in `YYYY-MM-DD` format            | `openid`     |
+| `cc.neverlose.user_id`  | User ID presented as integer                        | `profile`    |
+| `cc.neverlose.login`    | User's login                                        | `profile`    |
 
 ## Reseller integration
 
