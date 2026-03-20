@@ -27,6 +27,7 @@
     * [Python example](#python-example)
     * [Javascript example](#javascript-example)
     * [PHP library](#php-library)
+    * [JavaScript & TypeScript SDK](#javascript--typescript-sdk)
 * [Example webhook callback handlers](#example-webhook-callback-handlers)
     * [python + bottle](#python--bottle)
     * [nodejs + express](#nodejs--express)
@@ -552,6 +553,34 @@ composer require rainedot/php-nl-market
 require("vendor/autoload.php");
 $api = new \Rainedot\PhpNlMarket\MarketAPI('YOUR_API_KEY', 1);
 $api->validateRequest(array $request); // Returns true if request is valid
+```
+
+
+### JavaScript & TypeScript SDK
+
+[🔗 nl-market-sdk on GitHub](https://github.com/Walkaisa/nl-market-sdk) • [📖 Full Documentation](https://github.com/Walkaisa/nl-market-sdk#readme)
+
+```bash
+# npm
+npm install nl-market-sdk
+
+# pnpm (recommended)
+pnpm add nl-market-sdk
+```
+
+*…or yarn / bun – pick your package manager.*
+
+```ts
+import { MarketClient } from "nl-market-sdk";
+
+const client = new MarketClient({
+  userId: "12345",              // Your user ID from API settings.
+  secret: "SUPER_SECRET_KEY",   // Your secret from API settings.
+  // integrationId: 100         // Only needed if using checkout integration.
+});
+
+const res = await client.getBalance();
+if (res.success) console.log(`💰 ${res.balance} NLE left`);
 ```
 
 ## Example webhook callback handlers
